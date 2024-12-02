@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import Input from "../components/InputComponent";
 import Button from "../components/ButtonComponent";
 import { Container, Items } from "../components/SignupComponent";
+import { useNavigate } from "react-router-dom";
 import AxiosApi from "../api/AxiosApi";
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>;
 
@@ -77,7 +77,7 @@ const Signup = () => {
 
   const handleClick1 = () => {
     if (isDaumLoaded) {
-      const { daum } = window; // TypeScript에서의 'any' 없이 사용
+      const { daum } = window;
       new daum.Postcode({
         oncomplete: handleComplete,
       }).open();
@@ -224,22 +224,29 @@ const Signup = () => {
         />
       </Items>
       <Items varient="addres">
-        <div>
-          <Input
-            type="text"
-            placeholder="주소"
-            value={inputAddress}
-            onChange={onChangeAddress}
-          />
-          {/* 상세 주소를 추가로 입력받을 Input 필드 */}
-          <Input
-            type="text"
-            placeholder="상세 주소"
-            value={detailAddress}
-            onChange={(e) => setDetailAddress(e.target.value)}
-          />
-        </div>
-        <Button onClick={handleClick1}>주소찾기</Button>
+        <button onClick={handleClick1}>주소찾기</button>
+      </Items>
+      <Items>
+        <Input
+          type="text"
+          placeholder="우편번호"
+          value={postcode}
+          onChange={(e) => setPostcode(e.target.value)}
+        />
+        <Input
+          type="text"
+          placeholder="주소"
+          value={address}
+          onChange={(e) => setAddress(e.target.value)}
+        />
+      </Items>
+      <Items>
+        <Input
+          type="text"
+          placeholder="상세 주소"
+          value={detailAddress}
+          onChange={(e) => setDetailAddress(e.target.value)}
+        />
       </Items>
       <Items variant="phone">
         <Input
