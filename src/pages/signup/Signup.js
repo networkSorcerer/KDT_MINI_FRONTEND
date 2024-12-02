@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
-import Input from "../components/InputComponent";
-import Button from "../components/ButtonComponent";
-import { Container, Items } from "../components/SignupComponent";
+import Input from "../../components/InputComponent";
+import Button from "../../components/ButtonComponent";
+import { Container, Items } from "../../components/SignupComponent";
 import { useNavigate } from "react-router-dom";
-import AxiosApi from "../api/AxiosApi";
+import AxiosApi from "../../api/AxiosApi";
+import { Button1, Select } from "../../components/style3";
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>;
 
 const Signup = () => {
@@ -14,16 +15,18 @@ const Signup = () => {
   const [inputName, setInputName] = useState("");
   const [inputEmail, setInputEmail] = useState("");
   const [inputAddress, setInputAddress] = useState("");
-  const [inputPhone, setInputPhone] = useState("");
   // 오류 메시지
   const [pwMessage, setPwMessage] = useState("");
   const [conPwMessage, setConPwMessage] = useState("");
   const [mailMessage, setMailMessage] = useState("");
+  const [phMessage, setPhMessage] = useState("");
+  const [phMessage1, setPhMessage1] = useState("");
   //주소 입력
   const [postcode, setPostcode] = useState(""); // 우편번호
   const [address, setAddress] = useState(""); // 기본 주소
   const [detailAddress, setDetailAddress] = useState(""); // 상세 주소
   //전화 번호 입력
+  const [ph, setPh] = useState("");
   const [hpFst, setHpFst] = useState("010"); // 초기값 010
   const [hpMid, setHpMid] = useState("");
   const [hpLst, setHpLst] = useState("");
@@ -32,9 +35,14 @@ const Signup = () => {
   const [isPw, setIsPw] = useState(false);
   const [isConPw, setIsConPw] = useState(false);
   const [isName, setIsName] = useState(false);
-
+  // 전번 유효성 검사
+  const [isPh, setIsPh] = useState(false);
+  const [isPh1, setIsPh1] = useState(false);
   const [isDaumLoaded, setIsDaumLoaded] = useState(false);
-
+  // 주소 입력 유효성 검사
+  const [isPost, setIsPost] = useState(false);
+  const [isAddr, setIsAddr] = useState(false);
+  const [isDAddr, setIsDAddr] = useState(false);
   useEffect(() => {
     const script = document.createElement("script");
     script.src =
@@ -42,11 +50,13 @@ const Signup = () => {
     script.async = true;
     script.onload = () => setIsDaumLoaded(true); // Daum API가 로드되었을 때 상태 업데이트
     document.head.appendChild(script);
-
+    setIsPost(postcode.length > 0);
+    setIsAddr(address.length > 0);
+    UnionFirst();
     return () => {
       document.head.removeChild(script); // 컴포넌트 언마운트 시 스크립트 제거
     };
-  }, []); // 의존성 배열을 빈 배열로 설정하여 한 번만 실행되도록 함
+  }, [address, postcode, hpFst, hpMid, hpLst]); // 의존성 배열을 빈 배열로 설정하여 한 번만 실행되도록 함
 
   const handleComplete = (data) => {
     let fullAddress = data.address;
@@ -85,7 +95,7 @@ const Signup = () => {
       console.log("Daum Postcode API is not loaded yet.");
     }
   };
-
+  // 이메일 유효성 검사
   const onChangeMail = (e) => {
     setInputEmail(e.target.value);
     const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
@@ -111,6 +121,30 @@ const Signup = () => {
       setIsPw(true);
     }
   };
+  const onChageMidPh = (e) => {
+    const phRegex = /^\d{4}$/;
+    const midPhCurrent = e.target.value;
+    setHpMid(midPhCurrent);
+    if (!phRegex.test(midPhCurrent)) {
+      setPhMessage("4자리 숫자로 입력해 주세요.");
+      setIsPh(false);
+    } else {
+      setPhMessage("확인되었습니다.");
+      setIsPh(true);
+    }
+  };
+  const onChageLstPh = (e) => {
+    const phRegex = /^\d{4}$/;
+    const lstPhCurrent = e.target.value;
+    setHpLst(lstPhCurrent);
+    if (!phRegex.test(lstPhCurrent)) {
+      setPhMessage1("4자리 숫자로 입력해 주세요.");
+      setIsPh1(false);
+    } else {
+      setPhMessage1("확인되었습니다.");
+      setIsPh1(true);
+    }
+  };
   const onChangeConPw = (e) => {
     const passwordCurrent = e.target.value;
     setInputConPw(passwordCurrent);
@@ -126,12 +160,7 @@ const Signup = () => {
     setInputName(e.target.value);
     setIsName(true);
   };
-  const onChangeAddress = (e) => {
-    setInputAddress(e.target.value);
-  };
-  const onChangePhone = (e) => {
-    setInputPhone(e.target.value);
-  };
+
   // 회원 가입 여부 확인
   const memberRegCheck = async (email) => {
     try {
@@ -148,9 +177,22 @@ const Signup = () => {
       console.log(error);
     }
   };
+
+  const UnionFirst = () => {
+    setPh(hpFst + "-" + hpMid + "-" + hpLst);
+    setInputAddress(postcode + ":" + address + ":" + detailAddress);
+  };
   const onClickLogin = async () => {
+    console.log(ph);
+    console.log(inputAddress);
     try {
-      const memberReg = await AxiosApi.signup(inputEmail, inputPw, inputName);
+      const memberReg = await AxiosApi.signup(
+        inputEmail,
+        inputPw,
+        inputName,
+        inputAddress,
+        ph
+      );
       console.log(memberReg.data);
       if (memberReg.data) {
         navigate("/");
@@ -162,6 +204,25 @@ const Signup = () => {
     } catch (e) {
       alert("서버가 응답하지 않습니다.");
     }
+  };
+  const onChangePostCode = (e) => {
+    const newPostCode = e.target.value.trim();
+    setPostcode(newPostCode);
+
+    // 빈 문자열 또는 null 체크
+    setIsPost(newPostCode !== "" && newPostCode !== null);
+  };
+
+  const onChangeAddr = (e) => {
+    const newAddr = e.target.value;
+    setAddress(newAddr);
+    setIsAddr(newAddr.length > 0);
+  };
+
+  const onChangeDAddr = (e) => {
+    const newDAddr = e.target.value;
+    setDetailAddress(newDAddr);
+    setIsDAddr(newDAddr.length > 0);
   };
 
   return (
@@ -224,20 +285,22 @@ const Signup = () => {
         />
       </Items>
       <Items varient="addres">
-        <button onClick={handleClick1}>주소찾기</button>
+        <Button1 onClick={handleClick1}>주소찾기</Button1>
       </Items>
       <Items>
-        <Input
+        <input
           type="text"
           placeholder="우편번호"
           value={postcode}
-          onChange={(e) => setPostcode(e.target.value)}
+          onChange={onChangePostCode}
+          disabled
         />
-        <Input
+        <input
           type="text"
           placeholder="주소"
           value={address}
-          onChange={(e) => setAddress(e.target.value)}
+          onChange={onChangeAddr}
+          disabled
         />
       </Items>
       <Items>
@@ -245,19 +308,86 @@ const Signup = () => {
           type="text"
           placeholder="상세 주소"
           value={detailAddress}
-          onChange={(e) => setDetailAddress(e.target.value)}
+          onChange={onChangeDAddr}
         />
       </Items>
+      <Items variant="hint">
+        {postcode.length > 0 && (
+          <span className={`message ${isPost ? "success" : "error"}`}>
+            <p>확인하였습니다.</p>
+          </span>
+        )}
+      </Items>
+      <Items variant="hint">
+        {address.length > 0 && (
+          <span className={`message ${isAddr ? "success" : "error"}`}>
+            <p>확인하였습니다.</p>
+          </span>
+        )}
+      </Items>
+      <Items variant="hint">
+        {detailAddress.length > 0 && (
+          <span className={`message ${isDAddr ? "success" : "error"}`}>
+            <p>확인하였습니다.</p>
+          </span>
+        )}
+      </Items>
       <Items variant="phone">
+        <Select
+          placeholder="전화번호"
+          value={hpFst}
+          onChange={(e) => setHpFst(e.target.value)}
+        >
+          <option value="010">010</option>
+          <option value="011">011</option>
+        </Select>
+        <Input
+          type="number"
+          placeholder="전화번호"
+          value={hpMid}
+          onChange={onChageMidPh}
+        />
         <Input
           type="text"
           placeholder="전화번호"
-          value={inputPhone}
-          onChange={onChangePhone}
+          value={hpLst}
+          onChange={onChageLstPh}
         />
       </Items>
+      <Items variant="hint">
+        {hpMid.length > 3 && (
+          <span className={`message ${isPh ? "success" : "error"}`}>
+            {phMessage}
+          </span>
+        )}
+      </Items>
+      <Items variant="hint">
+        {hpLst.length > 3 && (
+          <span className={`message ${isPh1 ? "success" : "error"}`}>
+            {phMessage1}
+          </span>
+        )}
+      </Items>
       <Items variant="item2">
-        {isMail && isPw && isConPw && isName ? (
+        {console.log(
+          isMail,
+          isPw,
+          isConPw,
+          isName,
+          isPh,
+          isPh1,
+          isPost,
+          isAddr,
+          isDAddr
+        )}
+        {isMail &&
+        isPw &&
+        isConPw &&
+        isName &&
+        isPh &&
+        isPh1 &&
+        isAddr &&
+        isDAddr ? (
           <Button enabled onClick={onClickLogin}>
             NEXT
           </Button>

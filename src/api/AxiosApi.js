@@ -14,11 +14,13 @@ const AxiosApi = {
   regCheck: async (email) => {
     return await axios.get(KH_DOMAIN + `/auth/exists/${email}`);
   },
-  signup: async (email, pwd, name) => {
+  signup: async (email, pwd, name, address, ph) => {
     const member = {
       email: email,
       password: pwd,
-      name: name,
+      username: name,
+      address: address,
+      phone_number: ph,
     };
     return await axios.post(KH_DOMAIN + `/auth/signup`, member);
   },

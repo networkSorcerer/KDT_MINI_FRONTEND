@@ -1,15 +1,15 @@
 import React from "react";
 import { useEffect, useState } from "react";
-import Input from "../components/InputComponent";
-import Button from "../components/ButtonComponent";
-import { Items } from "../components/SignupComponent";
+import Input from "../../components/InputComponent";
+import Button from "../../components/ButtonComponent";
+import { Items } from "../../components/SignupComponent";
 const Address = () => {
   const [postcode, setPostcode] = useState(""); // 우편번호
   const [address, setAddress] = useState(""); // 기본 주소
   const [detailAddress, setDetailAddress] = useState(""); // 상세 주소
 
   const [isDaumLoaded, setIsDaumLoaded] = useState(false);
-
+  const [addr, setAddr] = useState("");
   useEffect(() => {
     const script = document.createElement("script");
     script.src =
@@ -60,6 +60,14 @@ const Address = () => {
       console.log("Daum Postcode API is not loaded yet.");
     }
   };
+
+  const UnionAddress = () => {
+    setAddr(postcode + ":" + address + ":" + detailAddress);
+  };
+  useEffect(() => {
+    // addr이 변경될 때마다 콘솔 로그 출력
+    console.log(addr);
+  }, [addr]);
   return (
     <Items varient="addres">
       <Button onClick={handleClick1}>주소찾기</Button>
@@ -82,6 +90,7 @@ const Address = () => {
         value={detailAddress}
         onChange={(e) => setDetailAddress(e.target.value)}
       />
+      <Button onClick={UnionAddress}>합체 주소</Button>
     </Items>
   );
 };

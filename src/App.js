@@ -1,10 +1,10 @@
 import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./Home";
-import Login from "./pages/Login";
-import Signup from "./pages/Signup";
+import Login from "./pages/signup/Login";
+import Signup from "./pages/signup/Signup";
 import AdminHome from "./pages/admin/AdminHome";
-import Address from "./pages/address";
+import Address from "./pages/signup/address";
 function App() {
   return (
     <>

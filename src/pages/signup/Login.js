@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import imgLogo from "../images/kakaoLion.png";
-import Button from "../components/ButtonComponent";
-import Input from "../components/InputComponent";
-import { Container, Items } from "../components/SignupComponent";
-import AxiosApi from "../api/AxiosApi";
-import Modal from "../utils/Modal";
+import imgLogo from "../../images/kakaoLion.png";
+import Button from "../../components/ButtonComponent";
+import Input from "../../components/InputComponent";
+import { Container, Items } from "../../components/SignupComponent";
+import AxiosApi from "../../api/AxiosApi";
+import Modal from "../../utils/Modal";
 const Img = styled.img`
   width: 180px;
   object-fit: cover;
@@ -90,7 +90,7 @@ const Login = () => {
       </Items>
 
       <Items variant="signup">
-        <Link to="/Signup" className="link_style">
+        <Link to="/signup" className="link_style">
           <span>Sign Up</span>
         </Link>
       </Items>
