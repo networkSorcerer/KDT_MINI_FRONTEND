@@ -3,6 +3,7 @@ import React, { useState } from "react";
 const OwnPCCustomizing = () => {
   // 부품 목록을 상태로 관리
   const [selectedParts, setSelectedParts] = useState({});
+  const [cart, setCart] = useState([]); // 장바구니 상태
   const [isPartSelected, setIsPartSelected] = useState(false); // 부품이 선택되었는지 여부
 
   // 각 부품에 대한 선택지
@@ -22,6 +23,18 @@ const OwnPCCustomizing = () => {
       [partCategory]: part,
     });
     setIsPartSelected(true);
+  };
+
+  // 장바구니에 선택된 모든 부품을 추가하는 함수
+  const addToCart = () => {
+    if (
+      Object.keys(selectedParts).length === Object.keys(partsOptions).length
+    ) {
+      setCart((prevCart) => [...prevCart, selectedParts]); // 모든 부품을 장바구니에 추가
+      alert("선택된 부품들이 장바구니에 추가되었습니다!");
+    } else {
+      alert("모든 부품을 선택해 주세요.");
+    }
   };
 
   return (
@@ -59,7 +72,30 @@ const OwnPCCustomizing = () => {
               </li>
             ))}
           </ul>
-          <button style={styles.cartButton}>장바구니에 추가</button>
+          <button onClick={addToCart} style={styles.cartButton}>
+            장바구니에 추가
+          </button>
+        </div>
+      )}
+
+      {/* 장바구니 보기 */}
+      {cart.length > 0 && (
+        <div style={styles.cart}>
+          <h3>장바구니</h3>
+          <ul>
+            {cart.map((pc, index) => (
+              <li key={index}>
+                <h4>구성 {index + 1}:</h4>
+                <ul>
+                  {Object.keys(pc).map((category) => (
+                    <li key={category}>
+                      <strong>{category.toUpperCase()}:</strong> {pc[category]}
+                    </li>
+                  ))}
+                </ul>
+              </li>
+            ))}
+          </ul>
         </div>
       )}
     </div>
@@ -110,6 +146,13 @@ const styles = {
     border: "none",
     borderRadius: "5px",
     cursor: "pointer",
+  },
+  cart: {
+    marginTop: "20px",
+    padding: "10px",
+    border: "1px solid #ddd",
+    borderRadius: "8px",
+    backgroundColor: "#f9f9f9",
   },
 };
 
