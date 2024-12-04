@@ -10,55 +10,59 @@ const StepwisePCCustomizing = () => {
     {
       category: "cpu",
       options: [
-        { name: "RYZEN 5600G", price: 200000 },
-        { name: "RYZEN 5600X", price: 250000 },
-        { name: "Intel i5 11600K", price: 270000 },
-        { name: "Intel i7 12700", price: 400000 },
+        { name: "RYZEN 5600G", price: 200000, image: "/images/cpu1.jpg" },
+        { name: "RYZEN 5600X", price: 250000, image: "/images/cpu2.jpg" },
+        { name: "Intel i5 11600K", price: 270000, image: "/images/cpu3.jpg" },
+        { name: "Intel i7 12700", price: 400000, image: "/images/cpu4.jpg" },
       ],
     },
     {
       category: "motherboard",
       options: [
-        { name: "MSI 550M", price: 120000 },
-        { name: "ASUS B550", price: 140000 },
-        { name: "Gigabyte Z590", price: 200000 },
-        { name: "MSI Z690", price: 300000 },
+        { name: "MSI 550M", price: 120000, image: "/images/motherboard1.jpg" },
+        { name: "ASUS B550", price: 140000, image: "/images/motherboard2.jpg" },
+        {
+          name: "Gigabyte Z590",
+          price: 200000,
+          image: "/images/motherboard3.jpg",
+        },
+        { name: "MSI Z690", price: 300000, image: "/images/motherboard4.jpg" },
       ],
     },
     {
       category: "ram",
       options: [
-        { name: "SAMSUNG 8GB", price: 50000 },
-        { name: "Corsair 16GB", price: 100000 },
-        { name: "Kingston 32GB", price: 150000 },
-        { name: "G.SKILL 8GB", price: 60000 },
+        { name: "SAMSUNG 8GB", price: 50000, image: "/images/ram1.jpg" },
+        { name: "Corsair 16GB", price: 100000, image: "/images/ram2.jpg" },
+        { name: "Kingston 32GB", price: 150000, image: "/images/ram3.jpg" },
+        { name: "G.SKILL 8GB", price: 60000, image: "/images/ram4.jpg" },
       ],
     },
     {
       category: "vga",
       options: [
-        { name: "NVIDIA 1060GTX", price: 300000 },
-        { name: "NVIDIA 3070", price: 600000 },
-        { name: "AMD RX 580", price: 350000 },
-        { name: "AMD RX 6900", price: 1000000 },
+        { name: "NVIDIA 1060GTX", price: 300000, image: "/images/vga1.jpg" },
+        { name: "NVIDIA 3070", price: 600000, image: "/images/vga2.jpg" },
+        { name: "AMD RX 580", price: 350000, image: "/images/vga3.jpg" },
+        { name: "AMD RX 6900", price: 1000000, image: "/images/vga4.jpg" },
       ],
     },
     {
       category: "ssd",
       options: [
-        { name: "EVO 512GB", price: 80000 },
-        { name: "Crucial 1TB", price: 120000 },
-        { name: "Samsung 980 500GB", price: 100000 },
-        { name: "ADATA 1TB", price: 90000 },
+        { name: "EVO 512GB", price: 80000, image: "/images/ssd1.jpg" },
+        { name: "Crucial 1TB", price: 120000, image: "/images/ssd2.jpg" },
+        { name: "Samsung 980 500GB", price: 100000, image: "/images/ssd3.jpg" },
+        { name: "ADATA 1TB", price: 90000, image: "/images/ssd4.jpg" },
       ],
     },
     {
       category: "hdd",
       options: [
-        { name: "WD 2TB", price: 70000 },
-        { name: "Seagate 4TB", price: 150000 },
-        { name: "Toshiba 1TB", price: 50000 },
-        { name: "WD 6TB", price: 250000 },
+        { name: "WD 2TB", price: 70000, image: "/images/hdd1.jpg" },
+        { name: "Seagate 4TB", price: 150000, image: "/images/hdd2.jpg" },
+        { name: "Toshiba 1TB", price: 50000, image: "/images/hdd3.jpg" },
+        { name: "WD 6TB", price: 250000, image: "/images/hdd4.jpg" },
       ],
     },
   ];
@@ -158,7 +162,14 @@ const StepwisePCCustomizing = () => {
                   }
                   style={styles.optionButton}
                 >
-                  {option.name} ({formatPrice(option.price)})
+                  <img
+                    src={option.image}
+                    alt={option.name}
+                    style={styles.optionImage}
+                  />
+                  <div>
+                    {option.name} ({formatPrice(option.price)})
+                  </div>
                 </button>
               ))}
             </div>
@@ -238,6 +249,7 @@ const styles = {
     justifyContent: "space-between",
     marginBottom: "20px", // 버튼 사이 여백
   },
+
   stepButton: {
     padding: "12px",
     fontSize: "16px",
@@ -257,10 +269,13 @@ const styles = {
   },
   optionList: {
     display: "grid",
-    gridTemplateColumns: "repeat(2, 1fr)",
-    gap: "10px",
+    gridTemplateColumns: "1fr", // 1열로 정렬
+    gap: "15px",
   },
   optionButton: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
     padding: "12px",
     fontSize: "14px",
     cursor: "pointer",
@@ -268,6 +283,12 @@ const styles = {
     border: "1px solid #ddd",
     borderRadius: "5px",
     textAlign: "center",
+  },
+  optionImage: {
+    width: "80px",
+    height: "80px",
+    marginBottom: "10px",
+    objectFit: "cover",
   },
   summaryContainer: {
     flex: 1,
