@@ -460,17 +460,23 @@ const styles = {
     padding: "20px",
     fontFamily: "Arial, sans-serif",
   },
-  stepButtons: {
-    display: "flex",
-    justifyContent: "space-around",
-    marginBottom: "20px",
-  },
+
   stepButton: {
-    padding: "10px 20px",
-    border: "1px solid #ccc",
+    padding: "16px",
+    fontSize: "13px",
+    border: "1px solid #ddd",
     borderRadius: "5px",
     cursor: "pointer",
+    width: "200%",
+    textAlign: "center",
   },
+
+  stepButtons: {
+    display: "flex",
+    justifyContent: "space-between",
+    marginBottom: "20px", // 버튼 사이 여백
+  },
+
   content: {
     display: "flex",
     justifyContent: "space-between",
@@ -495,7 +501,7 @@ const styles = {
     cursor: "pointer",
   },
   pcImage: {
-    width: "100%",
+    width: "75%",
     height: "150px",
     objectFit: "cover",
     marginBottom: "10px",
@@ -507,7 +513,7 @@ const styles = {
     textAlign: "center",
   },
   selectedPCImage: {
-    width: "100%",
+    width: "75%",
     height: "200px",
     objectFit: "cover",
     marginBottom: "10px",
