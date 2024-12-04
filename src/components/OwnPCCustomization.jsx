@@ -80,7 +80,23 @@ const StepwisePCCustomizing = () => {
       setSelectedParts({});
       setCurrentStep(0); // 초기화
     } else {
-      alert("모든 항목을 선택해 주세요.");
+      // 선택되지 않은 부품이 있을 경우
+      const missingParts = partsOptions.filter(
+        (part) => !selectedParts[part.category]
+      );
+      if (missingParts.length > 0) {
+        alert(
+          `${missingParts[0].category.toUpperCase()} 부품을 선택하지 않았습니다.`
+        );
+        // 선택하지 않은 부품 탭으로 이동
+        const missingPartCategory = missingParts[0].category;
+        const stepIndex = partsOptions.findIndex(
+          (part) => part.category === missingPartCategory
+        );
+        setCurrentStep(stepIndex); // 해당 부품 탭으로 이동
+      } else {
+        alert("모든 항목을 선택해 주세요.");
+      }
     }
   };
 
@@ -153,7 +169,7 @@ const StepwisePCCustomizing = () => {
                   <div key={category} style={styles.selectedItem}>
                     <strong>{category.toUpperCase()}:</strong>{" "}
                     {selectedParts[category].name} (
-                    {formatPrice(selectedParts[category].price)})
+                    {formatPrice(selectedParts[category].price)}))
                   </div>
                 )
             )}
@@ -178,10 +194,10 @@ const StepwisePCCustomizing = () => {
               <li key={index}>
                 <h4>구성 {index + 1}:</h4>
                 <ul>
-                  {Object.keys(pc).map((category) => (
+                  {selectedPartOrder.map((category) => (
                     <li key={category}>
                       <strong>{category.toUpperCase()}:</strong>{" "}
-                      {pc[category].name} ({formatPrice(pc[category].price)})
+                      {pc[category]?.name} ({formatPrice(pc[category].price)})
                     </li>
                   ))}
                 </ul>
