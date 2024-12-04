@@ -100,6 +100,12 @@ const StepwisePCCustomizing = () => {
     }
   };
 
+  // 장바구니에서 항목 제거
+  const removeFromCart = (index) => {
+    const updatedCart = cart.filter((_, i) => i !== index);
+    setCart(updatedCart);
+  };
+
   // 총 가격 계산
   const calculateTotalPrice = (config) => {
     return Object.values(config).reduce((sum, part) => sum + part.price, 0);
@@ -202,6 +208,12 @@ const StepwisePCCustomizing = () => {
                   ))}
                 </ul>
                 <h4>총 가격: {formatPrice(calculateTotalPrice(pc))}</h4>
+                <button
+                  onClick={() => removeFromCart(index)}
+                  style={styles.removeButton}
+                >
+                  삭제
+                </button>
               </li>
             ))}
           </ul>
@@ -289,6 +301,14 @@ const styles = {
     border: "1px solid #ddd",
     borderRadius: "8px",
     backgroundColor: "#f9f9f9",
+  },
+  removeButton: {
+    padding: "8px 16px",
+    backgroundColor: "#dc3545",
+    color: "white",
+    border: "none",
+    borderRadius: "5px",
+    cursor: "pointer",
   },
 };
 
