@@ -10,59 +10,187 @@ const StepwisePCCustomizing = () => {
     {
       category: "cpu",
       options: [
-        { name: "RYZEN 5600G", price: 200000, image: "/images/cpu1.jpg" },
-        { name: "RYZEN 5600X", price: 250000, image: "/images/cpu2.jpg" },
-        { name: "Intel i5 11600K", price: 270000, image: "/images/cpu3.jpg" },
-        { name: "Intel i7 12700", price: 400000, image: "/images/cpu4.jpg" },
+        { name: "RYZEN 5600", price: 129000, image: "/images/cpu1.jpg" },
+        { name: "RYZEN 5600G", price: 169000, image: "/images/cpu2.jpg" },
+        { name: "RYZEN 5600X", price: 179000, image: "/images/cpu3.jpg" },
+        { name: "RYZEN 7600", price: 242000, image: "/images/cpu4.jpg" },
+        { name: "RYZEN 5700G", price: 265000, image: "/images/cpu5.jpg" },
+        { name: "RYZEN 5800XT", price: 384000, image: "/images/cpu6.jpg" },
       ],
     },
     {
       category: "motherboard",
       options: [
-        { name: "MSI 550M", price: 120000, image: "/images/motherboard1.jpg" },
-        { name: "ASUS B550", price: 140000, image: "/images/motherboard2.jpg" },
         {
-          name: "Gigabyte Z590",
-          price: 200000,
+          name: "GIGABYTE A520M",
+          price: 64000,
+          image: "/images/motherboard1.jpg",
+        },
+        {
+          name: "GIGABYTE B550M",
+          price: 126000,
+          image: "/images/motherboard2.jpg",
+        },
+        {
+          name: "GIGABYTE B650M",
+          price: 154000,
           image: "/images/motherboard3.jpg",
         },
-        { name: "MSI Z690", price: 300000, image: "/images/motherboard4.jpg" },
+        {
+          name: "GIGABYTE A620M",
+          price: 174000,
+          image: "/images/motherboard4.jpg",
+        },
+        {
+          name: "GIGABYTE X570",
+          price: 237000,
+          image: "/images/motherboard5.jpg",
+        },
+        {
+          name: "GIGABYTE X670",
+          price: 377000,
+          image: "/images/motherboard6.jpg",
+        },
       ],
     },
     {
       category: "ram",
       options: [
-        { name: "SAMSUNG 8GB", price: 50000, image: "/images/ram1.jpg" },
-        { name: "Corsair 16GB", price: 100000, image: "/images/ram2.jpg" },
-        { name: "Kingston 32GB", price: 150000, image: "/images/ram3.jpg" },
-        { name: "G.SKILL 8GB", price: 60000, image: "/images/ram4.jpg" },
+        {
+          name: "SAMSUNG DDR4 PC4-21300 8GB",
+          price: 18000,
+          image: "/images/ram1.jpg",
+        },
+        {
+          name: "SAMSUNG DDR4 PC4-25600 4GB",
+          price: 19000,
+          image: "/images/ram2.jpg",
+        },
+        {
+          name: "SAMSUNG DDR4 PC4-25600 8GB",
+          price: 21000,
+          image: "/images/ram3.jpg",
+        },
+        {
+          name: "SAMSUNG DDR5 PC5-44800 8GB",
+          price: 38000,
+          image: "/images/ram4.jpg",
+        },
+        {
+          name: "SAMSUNG DDR4 PC4-21300 서버용 32GB",
+          price: 63000,
+          image: "/images/ram5.jpg",
+        },
+        {
+          name: "SAMSUNG DDR5 PC5-38400 16GB",
+          price: 77000,
+          image: "/images/ram6.jpg",
+        },
       ],
     },
     {
       category: "vga",
       options: [
-        { name: "NVIDIA 1060GTX", price: 300000, image: "/images/vga1.jpg" },
-        { name: "NVIDIA 3070", price: 600000, image: "/images/vga2.jpg" },
-        { name: "AMD RX 580", price: 350000, image: "/images/vga3.jpg" },
-        { name: "AMD RX 6900", price: 1000000, image: "/images/vga4.jpg" },
+        {
+          name: "[GIGABYTE] GeForce RTX 4060 WINDFORCE OC D6 8GB 피씨디렉트",
+          price: 425000,
+          image: "/images/vga1.jpg",
+        },
+        {
+          name: "[GIGABYTE] GeForce RTX 4060 Ti WINDFORCE OC D6 8GB 피씨디렉트",
+          price: 579000,
+          image: "/images/vga2.jpg",
+        },
+        {
+          name: "[GIGABYTE] GeForce RTX 4070 SUPER Gaming OC D6X 12GB 피씨디렉트",
+          price: 1029000,
+          image: "/images/vga3.jpg",
+        },
+        {
+          name: "[GIGABYTE] GeForce RTX 4070 Ti SUPER WINDFORCE OC D6X 16GB 피씨디렉트",
+          price: 1250000,
+          image: "/images/vga4.jpg",
+        },
+        {
+          name: "[GIGABYTE] 지포스 RTX 4080 SUPER AERO OC D6X 16GB 피씨디렉트",
+          price: 1749000,
+          image: "/images/vga5.jpg",
+        },
+        {
+          name: "[GIGABYTE] GeForce RTX 4090 Gaming OC D6X 24GB 피씨디렉트",
+          price: 3450000,
+          image: "/images/vga6.jpg",
+        },
       ],
     },
     {
       category: "ssd",
       options: [
-        { name: "EVO 512GB", price: 80000, image: "/images/ssd1.jpg" },
-        { name: "Crucial 1TB", price: 120000, image: "/images/ssd2.jpg" },
-        { name: "Samsung 980 500GB", price: 100000, image: "/images/ssd3.jpg" },
-        { name: "ADATA 1TB", price: 90000, image: "/images/ssd4.jpg" },
+        {
+          name: "[삼성전자] 공식인증 870 EVO SATA 250GB",
+          price: 73000,
+          image: "/images/ssd1.jpg",
+        },
+        {
+          name: "[삼성전자] 공식인증 980 M.2 NVMe 2280 250GB",
+          price: 78000,
+          image: "/images/ssd2.jpg",
+        },
+        {
+          name: "[삼성전자] 공식인증 970 EVO Plus M.2 NVMe 2280 250GB",
+          price: 81500,
+          image: "/images/ssd3.jpg",
+        },
+        {
+          name: "[삼성전자] 공식인증 870 QVO SATA 1TB",
+          price: 162500,
+          image: "/images/ssd4.jpg",
+        },
+        {
+          name: "[삼성전자] 공식인증 980 PRO M.2 NVMe 2280 1TB",
+          price: 208000,
+          image: "/images/ssd5.jpg",
+        },
+        {
+          name: "[삼성전자] 공식인증 990 PRO M.2 NVMe 2280 1TB",
+          price: 218000,
+          image: "/images/ssd6.jpg",
+        },
       ],
     },
     {
       category: "hdd",
       options: [
-        { name: "WD 2TB", price: 70000, image: "/images/hdd1.jpg" },
-        { name: "Seagate 4TB", price: 150000, image: "/images/hdd2.jpg" },
-        { name: "Toshiba 1TB", price: 50000, image: "/images/hdd3.jpg" },
-        { name: "WD 6TB", price: 250000, image: "/images/hdd4.jpg" },
+        {
+          name: "[Western Digital] BLUE HDD 1TB",
+          price: 81000,
+          image: "/images/hdd1.jpg",
+        },
+        {
+          name: "[Western Digital] MOBILE BLUE HDD 2TB",
+          price: 125000,
+          image: "/images/hdd2.jpg",
+        },
+        {
+          name: "[Western Digital] RED PLUS HDD 3TB",
+          price: 135000,
+          image: "/images/hdd3.jpg",
+        },
+        {
+          name: "[Western Digital] RED PRO HDD 2TB",
+          price: 169000,
+          image: "/images/hdd4.jpg",
+        },
+        {
+          name: "[Western Digital] Ultrastar HDD 20TB",
+          price: 749000,
+          image: "/images/hdd5.jpg",
+        },
+        {
+          name: "[Western Digital] Ultrastar HDD 24TB",
+          price: 909000,
+          image: "/images/hdd6.jpg",
+        },
       ],
     },
   ];
@@ -259,13 +387,13 @@ const styles = {
     width: "200%",
     textAlign: "center",
   },
-  
+
   stepContainer: {
     flex: 1,
     padding: "20px",
     border: "1px solid #ddd",
     borderRadius: "8px",
-    backgroundColor: "#f4f4f4",
+    backgroundColor: "white",
     marginRight: "20px",
   },
   optionList: {
@@ -280,7 +408,7 @@ const styles = {
     padding: "12px",
     fontSize: "14px",
     cursor: "pointer",
-    backgroundColor: "#f4f4f4",
+    backgroundColor: "white",
     border: "1px solid #ddd",
     borderRadius: "5px",
     textAlign: "center",
@@ -296,7 +424,7 @@ const styles = {
     padding: "20px",
     border: "1px solid #ddd",
     borderRadius: "8px",
-    backgroundColor: "#e9e9e9",
+    backgroundColor: "white",
   },
   selectedParts: {
     marginBottom: "20px",
@@ -322,7 +450,7 @@ const styles = {
     padding: "20px",
     border: "1px solid #ddd",
     borderRadius: "8px",
-    backgroundColor: "#f9f9f9",
+    backgroundColor: "white",
   },
   removeButton: {
     padding: "8px 16px",
