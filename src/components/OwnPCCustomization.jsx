@@ -256,9 +256,10 @@ const styles = {
     border: "1px solid #ddd",
     borderRadius: "5px",
     cursor: "pointer",
-    width: "100%",
+    width: "200%",
     textAlign: "center",
   },
+  
   stepContainer: {
     flex: 1,
     padding: "20px",
