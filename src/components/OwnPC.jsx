@@ -1,9 +1,17 @@
 import React, { useState } from "react";
 
-const StepwisePCCustomizing = () => {
+const OwnPC = () => {
   const [currentStep, setCurrentStep] = useState(0); // 현재 단계
   const [selectedParts, setSelectedParts] = useState({}); // 선택된 부품
   const [cart, setCart] = useState([]); // 장바구니 상태
+
+  // 가격 포맷 (원화, 3자리마다 쉼표)
+  const formatPrice = (price) => {
+    return price.toLocaleString("ko-KR", {
+      style: "currency",
+      currency: "KRW",
+    });
+  };
 
   // 각 부품에 대한 선택지와 가격
   const partsOptions = [
@@ -199,20 +207,32 @@ const StepwisePCCustomizing = () => {
   const handleSelectPart = (category, part) => {
     setSelectedParts({
       ...selectedParts,
-      [category]: part,
+      [category]: { ...part, quantity: 1 }, // 수량 1로 설정
     });
     setCurrentStep((prevStep) => prevStep + 1); // 다음 단계로 이동
+  };
+
+  // 수량 변경 처리
+  const handleQuantityChange = (category, delta) => {
+    setSelectedParts((prevParts) => {
+      const updatedPart = { ...prevParts[category] };
+      updatedPart.quantity += delta;
+      if (updatedPart.quantity < 1) updatedPart.quantity = 1; // 최소 수량은 1
+      return {
+        ...prevParts,
+        [category]: updatedPart,
+      };
+    });
   };
 
   // 장바구니에 추가
   const addToCart = () => {
     if (Object.keys(selectedParts).length === partsOptions.length) {
-      setCart((prevCart) => [...prevCart, selectedParts]);
+      setCart((prevCart) => [...prevCart, { ...selectedParts }]);
       alert("구성이 장바구니에 추가되었습니다!");
-      setSelectedParts({});
+      setSelectedParts({}); // 선택된 부품 초기화
       setCurrentStep(0); // 초기화
     } else {
-      // 선택되지 않은 부품이 있을 경우
       const missingParts = partsOptions.filter(
         (part) => !selectedParts[part.category]
       );
@@ -220,7 +240,6 @@ const StepwisePCCustomizing = () => {
         alert(
           `${missingParts[0].category.toUpperCase()} 부품을 선택하지 않았습니다.`
         );
-        // 선택하지 않은 부품 탭으로 이동
         const missingPartCategory = missingParts[0].category;
         const stepIndex = partsOptions.findIndex(
           (part) => part.category === missingPartCategory
@@ -240,25 +259,29 @@ const StepwisePCCustomizing = () => {
 
   // 총 가격 계산
   const calculateTotalPrice = (config) => {
-    return Object.values(config).reduce((sum, part) => sum + part.price, 0);
+    return Object.values(config).reduce(
+      (sum, part) => sum + part.price * part.quantity, // 수량 반영
+      0
+    );
   };
 
-  // 가격 포맷 (원화, 3자리마다 쉼표)
-  const formatPrice = (price) => {
-    return price.toLocaleString("ko-KR", {
-      style: "currency",
-      currency: "KRW",
-    });
+  // 장바구니 전체 총 금액 계산
+  const calculateCartTotalPrice = () => {
+    return cart.reduce((total, pc) => total + calculateTotalPrice(pc), 0);
   };
 
   // 선택된 부품 순서
   const selectedPartOrder = ["cpu", "motherboard", "ram", "vga", "ssd", "hdd"];
 
+  const handleBuyNow = () => {
+    alert("구매 페이지로 이동합니다.");
+    // 구매 페이지로 이동하는 코드 작성 (예: 페이지 전환)
+  };
+
   return (
     <div style={styles.container}>
       <h1>단계별 커스텀 PC</h1>
 
-      {/* 부품 선택 버튼 위치 변경 */}
       <div style={styles.stepButtons}>
         {partsOptions.map((part, index) => (
           <button
@@ -275,11 +298,8 @@ const StepwisePCCustomizing = () => {
       </div>
 
       <div style={styles.content}>
-        {/* 부품 선택 */}
         <div style={styles.stepContainer}>
           <h2>부품 선택</h2>
-
-          {/* 현재 단계 표시 */}
           {currentStep < partsOptions.length && (
             <div style={styles.optionList}>
               {partsOptions[currentStep].options.map((option, index) => (
@@ -304,7 +324,6 @@ const StepwisePCCustomizing = () => {
           )}
         </div>
 
-        {/* 선택된 구성 */}
         <div style={styles.summaryContainer}>
           <h2>선택된 구성</h2>
           <div style={styles.selectedParts}>
@@ -315,6 +334,21 @@ const StepwisePCCustomizing = () => {
                     <strong>{category.toUpperCase()}:</strong>{" "}
                     {selectedParts[category].name} (
                     {formatPrice(selectedParts[category].price)}))
+                    <div>
+                      <button
+                        onClick={() => handleQuantityChange(category, -1)}
+                        style={styles.quantityButton}
+                      >
+                        -
+                      </button>
+                      <span>{selectedParts[category].quantity}</span>
+                      <button
+                        onClick={() => handleQuantityChange(category, 1)}
+                        style={styles.quantityButton}
+                      >
+                        +
+                      </button>
+                    </div>
                   </div>
                 )
             )}
@@ -323,14 +357,12 @@ const StepwisePCCustomizing = () => {
         </div>
       </div>
 
-      {/* 장바구니 추가 버튼 */}
       <div style={styles.cartButtonContainer}>
         <button onClick={addToCart} style={styles.cartButton}>
           장바구니에 추가
         </button>
       </div>
 
-      {/* 장바구니 보기 */}
       {cart.length > 0 && (
         <div style={styles.cart}>
           <h3>장바구니</h3>
@@ -343,6 +375,13 @@ const StepwisePCCustomizing = () => {
                     <li key={category}>
                       <strong>{category.toUpperCase()}:</strong>{" "}
                       {pc[category]?.name} ({formatPrice(pc[category].price)})
+                      <div>수량: {pc[category]?.quantity}</div>
+                      <h5>
+                        가격:{" "}
+                        {formatPrice(
+                          pc[category]?.price * pc[category]?.quantity
+                        )}
+                      </h5>
                     </li>
                   ))}
                 </ul>
@@ -356,6 +395,12 @@ const StepwisePCCustomizing = () => {
               </li>
             ))}
           </ul>
+          <h3>
+            전체 장바구니 총 가격: {formatPrice(calculateCartTotalPrice())}
+          </h3>
+          <button onClick={handleBuyNow} style={styles.buyButton}>
+            구매하기
+          </button>
         </div>
       )}
     </div>
@@ -375,7 +420,7 @@ const styles = {
   stepButtons: {
     display: "flex",
     justifyContent: "space-between",
-    marginBottom: "20px", // 버튼 사이 여백
+    marginBottom: "20px",
   },
 
   stepButton: {
@@ -398,7 +443,7 @@ const styles = {
   },
   optionList: {
     display: "grid",
-    gridTemplateColumns: "1fr", // 1열로 정렬
+    gridTemplateColumns: "1fr",
     gap: "15px",
   },
   optionButton: {
@@ -433,17 +478,17 @@ const styles = {
     marginBottom: "10px",
   },
   cartButtonContainer: {
-    marginTop: "20px",
     textAlign: "center",
+    marginTop: "20px",
   },
   cartButton: {
-    padding: "12px 24px",
-    backgroundColor: "#28a745",
+    padding: "12px 20px",
+    fontSize: "16px",
+    cursor: "pointer",
+    backgroundColor: "#4CAF50",
     color: "white",
     border: "none",
     borderRadius: "5px",
-    cursor: "pointer",
-    width: "100%",
   },
   cart: {
     marginTop: "20px",
@@ -454,12 +499,28 @@ const styles = {
   },
   removeButton: {
     padding: "8px 16px",
-    backgroundColor: "#dc3545",
+    fontSize: "14px",
+    backgroundColor: "#f44336",
     color: "white",
     border: "none",
     borderRadius: "5px",
     cursor: "pointer",
   },
+  quantityButton: {
+    padding: "5px 10px",
+    fontSize: "16px",
+    cursor: "pointer",
+  },
+  buyButton: {
+    padding: "12px 20px",
+    fontSize: "16px",
+    backgroundColor: "#2196F3",
+    color: "white",
+    border: "none",
+    borderRadius: "5px",
+    cursor: "pointer",
+    marginTop: "20px",
+  },
 };
 
-export default StepwisePCCustomizing;
+export default OwnPC;
