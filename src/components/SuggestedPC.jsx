@@ -14,6 +14,11 @@ const SuggestedPC = () => {
     });
   };
 
+  // 가격대 버튼을 클릭했을 때 PC 목록을 불러오는 useEffect
+  useEffect(() => {
+    fetchPCs("70만원 미만"); // 초기값으로 70만원 미만 범위 불러오기
+  }, []);
+
   // 가격대별 제품을 불러오는 함수
   const fetchPCs = (priceRange) => {
     const examplePCs = {
@@ -294,13 +299,37 @@ const SuggestedPC = () => {
 
   // 제품을 선택하는 함수
   const handleSelectPC = (pc) => {
-    setSelectedPC(pc); // 선택된 PC 설정
+    setSelectedPC({ ...pc, quantity: 1 }); // 선택된 PC 설정 및 초기 수량 1로 설정
+  };
+
+  // 수량을 증가시키는 함수
+  const increaseQuantity = () => {
+    setSelectedPC((prev) => ({ ...prev, quantity: prev.quantity + 1 }));
+  };
+
+  // 수량을 감소시키는 함수
+  const decreaseQuantity = () => {
+    if (selectedPC.quantity > 1) {
+      setSelectedPC((prev) => ({ ...prev, quantity: prev.quantity - 1 }));
+    }
   };
 
   // 장바구니에 추가하는 함수
   const addToCart = () => {
     if (selectedPC) {
-      setCart((prevCart) => [...prevCart, selectedPC]); // 기존 장바구니에 선택된 PC 추가
+      // 장바구니에 이미 선택된 PC가 있으면 수량만 업데이트
+      const existingPC = cart.find((pc) => pc.id === selectedPC.id);
+      if (existingPC) {
+        setCart(
+          cart.map((pc) =>
+            pc.id === selectedPC.id
+              ? { ...pc, quantity: pc.quantity + selectedPC.quantity }
+              : pc
+          )
+        );
+      } else {
+        setCart((prevCart) => [...prevCart, selectedPC]); // 기존 장바구니에 선택된 PC 추가
+      }
       alert(`${selectedPC.name}가 장바구니에 추가되었습니다!`);
     }
   };
@@ -310,10 +339,15 @@ const SuggestedPC = () => {
     setCart(cart.filter((pc) => pc.id !== pcId)); // 해당 PC를 장바구니에서 삭제
   };
 
-  // 가격대 버튼을 클릭했을 때 PC 목록을 불러오는 useEffect
-  useEffect(() => {
-    fetchPCs("70만원 미만"); // 초기값으로 70만원 미만 범위 불러오기
-  }, []);
+  // 장바구니 전체 총 금액 계산
+  const calculateCartTotalPrice = () => {
+    return cart.reduce((total, pc) => total + pc.price * pc.quantity, 0);
+  };
+
+  const handleBuyNow = () => {
+    alert("구매 페이지로 이동합니다.");
+    // 구매 페이지로 이동하는 코드 작성 (예: 페이지 전환)
+  };
 
   return (
     <div style={styles.container}>
@@ -390,7 +424,7 @@ const SuggestedPC = () => {
               style={styles.pcCard}
               onClick={() => handleSelectPC(pc)}
             >
-              <img src={pc.image} alt={pc.name} style={styles.pcImage} />{" "}
+              <img src={pc.image} alt={pc.name} style={styles.pcImage} />
               <h3>{pc.name}</h3>
               <p>{`가격: ${formatPrice(pc.price)}`}</p>
               <p>{`CPU: ${pc.cpu}`}</p>
@@ -419,6 +453,18 @@ const SuggestedPC = () => {
               <p>{`VGA: ${selectedPC.vga}`}</p>
               <p>{`SSD: ${selectedPC.ssd}`}</p>
               <p>{`HDD: ${selectedPC.hdd}`}</p>
+
+              {/* 수량 조절 */}
+              <div>
+                <button style={styles.button} onClick={decreaseQuantity}>
+                  -
+                </button>
+                <span style={styles.quantity}>{selectedPC.quantity}</span>
+                <button style={styles.button} onClick={increaseQuantity}>
+                  +
+                </button>
+              </div>
+
               <button style={styles.button} onClick={addToCart}>
                 장바구니에 추가
               </button>
@@ -435,13 +481,15 @@ const SuggestedPC = () => {
             <div key={index} style={styles.cartItem}>
               <h3>{pc.name}</h3>
               <img src={pc.image} alt={pc.name} style={styles.cartItemImage} />
-              <p>{`가격: ${formatPrice(pc.price)}`}</p>
               <p>{`CPU: ${pc.cpu}`}</p>
               <p>{`MOTHERBOARD: ${pc.motherboard}`}</p>
               <p>{`RAM: ${pc.ram}`}</p>
               <p>{`VGA: ${pc.vga}`}</p>
               <p>{`SSD: ${pc.ssd}`}</p>
               <p>{`HDD: ${pc.hdd}`}</p>
+              <p>{`가격: ${formatPrice(pc.price)}`}</p>
+              <p>{`수량: ${pc.quantity}`}</p>
+              <p>{`총 가격: ${formatPrice(pc.price * pc.quantity)}`}</p>
               <button
                 style={styles.removeButton}
                 onClick={() => removeFromCart(pc.id)}
@@ -450,6 +498,12 @@ const SuggestedPC = () => {
               </button>
             </div>
           ))}
+          <h3>
+            전체 장바구니 총 가격: {formatPrice(calculateCartTotalPrice())}
+          </h3>
+          <button onClick={handleBuyNow} style={styles.buyButton}>
+            구매하기
+          </button>
         </div>
       )}
     </div>
@@ -463,7 +517,6 @@ const styles = {
     padding: "20px",
     fontFamily: "Arial, sans-serif",
   },
-
   stepButton: {
     padding: "16px",
     fontSize: "13px",
@@ -473,13 +526,11 @@ const styles = {
     width: "200%",
     textAlign: "center",
   },
-
   stepButtons: {
     display: "flex",
     justifyContent: "space-between",
     marginBottom: "20px", // 버튼 사이 여백
   },
-
   content: {
     display: "flex",
     justifyContent: "space-between",
@@ -516,43 +567,57 @@ const styles = {
     textAlign: "center",
   },
   selectedPCImage: {
-    width: "75%",
-    height: "200px",
+    width: "100%",
+    height: "auto",
     objectFit: "cover",
-    marginBottom: "10px",
+    marginBottom: "20px",
   },
   button: {
-    padding: "10px 20px",
     backgroundColor: "#4CAF50",
     color: "white",
     border: "none",
-    borderRadius: "5px",
+    padding: "10px 20px",
     cursor: "pointer",
+    borderRadius: "5px",
+    margin: "10px 0",
+  },
+  quantity: {
+    fontSize: "18px",
+    margin: "0 10px",
   },
   cart: {
     marginTop: "30px",
+    border: "1px solid #ccc",
+    borderRadius: "5px",
+    padding: "20px",
   },
   cartItem: {
-    border: "1px solid #ccc",
-    padding: "10px",
+    borderBottom: "1px solid #eee",
+    padding: "10px 0",
     marginBottom: "10px",
-    display: "flex",
-    alignItems: "center",
   },
   cartItemImage: {
     width: "50px",
     height: "50px",
     objectFit: "cover",
-    marginRight: "10px",
   },
   removeButton: {
+    backgroundColor: "#FF0000",
+    color: "white",
+    border: "none",
     padding: "5px 10px",
-    backgroundColor: "#FF6347",
+    cursor: "pointer",
+    borderRadius: "5px",
+  },
+  buyButton: {
+    padding: "12px 20px",
+    fontSize: "16px",
+    backgroundColor: "#2196F3",
     color: "white",
     border: "none",
     borderRadius: "5px",
     cursor: "pointer",
-    marginLeft: "auto",
+    marginTop: "20px",
   },
 };
 
